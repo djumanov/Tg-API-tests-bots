@@ -15,26 +15,33 @@ def sendMessage(chat_id, text):
     }
     r = requests.get(url=url_for_sendMessage, params=msg)
 
+    print("sent message ......... ")
+
+
+def getUpdates():
+    r = requests.get(url=url_for_getUpdates)
+    stc = r.status_code
+
+    if stc == 200:
+        result = r.json()['result']
+        msg    = result[-1]['message']
+        msg_id = msg['message_id']
+
+        return stc, msg_id, msg
+    
+    return stc, None, None
+
+
 
 while True:
-    
-    r0 = requests.get(url=url_for_getUpdates)
-    if r0.status_code == 200:
-        first_msgs = len(r0.json()['result'])
-        
-        r1 = requests.get(url=url_for_getUpdates)
-        if r1.status_code == 200:
-            last_msgs = len(r1.json()['result'])
-            print("ok 1")
-            if first_msgs != last_msgs:
-                msg     = r1.json()['result'][-1]['message']
-                chat_id = msg['from']['id']
-                text    = msg['text']
-                print("ok 2")
+    status_code0, msgs0, msg0 = getUpdates()
+    print("status code 00 --->  ", status_code0)
+    if status_code0 == 200:
+        status_code1, msgs1, msg1 = getUpdates()
+        print("status code 01 --->  ", status_code0)
+        if status_code1 == 200:
+            if msgs0 != msgs1:
+                chat_id = msg1['from']['id']
+                text    = msg1['text']
+                print("last message ----- >>>>  ", text)
                 sendMessage(chat_id, text)
-                print(" sent ")
-
-
-            
-
-        
