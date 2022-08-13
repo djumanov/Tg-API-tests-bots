@@ -24,13 +24,14 @@ def getRandomUser():
     user = r.json()['results'][0]
     first = user['name']['first']
     last = user['name']['last']
-    print(first, last)
-
-getRandomUser()
+    
+    return first + " " + last
 
 
 
 def sendMessage(chat_id, text):
+    if not text:
+        text = getRandomUser()
     payload = {
         'chat_id': chat_id,
         'text': text
@@ -44,10 +45,13 @@ def main():
     while True:
         curr_update_id, chat_id, text = getUpdates()
         if last_update_id != curr_update_id:
-            sendMessage(chat_id, text)
+            if text == "/start":
+                sendMessage(chat_id, False)
+            else:
+                sendMessage(chat_id, f"{text} is not telegram command.")
             last_update_id = curr_update_id
 
-# main()
+main()
 
 
 
