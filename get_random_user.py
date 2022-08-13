@@ -11,7 +11,6 @@ def getUpdates():
         last_message = results[-1]
         update_id    = last_message['update_id']
         msg = last_message['message']
-        print(msg)
         chat_id      = msg['from']['id']
         text         = msg.get('text', 'no')
 
@@ -19,7 +18,16 @@ def getUpdates():
     
     return -1, None, None
 
-print(getUpdates())
+
+def main():
+    last_update_id = getUpdates()[0]
+    while True:
+        curr_update_id, chat_id, text = getUpdates()
+        if last_update_id != curr_update_id:
+            print("msg: ------->>>>>>> ", text)
+            last_update_id = curr_update_id
+
+main()
 
 
 
