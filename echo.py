@@ -23,24 +23,24 @@ def getUpdates():
     stc = r.status_code
 
     if stc == 200:
-        result = r.json()['result']
-        msg    = result[-1]['message']
-        msg_id = msg['message_id']
+        result = r.json()['result'][-1]
+        msg    = result['message']
+        update_id = result['update_id']
 
-        return stc, msg_id, msg
+        return stc, update_id, msg
     
     return stc, None, None
 
 
 
 while True:
-    status_code0, msgs0, msg0 = getUpdates()
+    status_code0, update_id0, msg0 = getUpdates()
     print("status code 00 --->  ", status_code0)
     if status_code0 == 200:
-        status_code1, msgs1, msg1 = getUpdates()
+        status_code1, update_id1, msg1 = getUpdates()
         print("status code 01 --->  ", status_code0)
         if status_code1 == 200:
-            if msgs0 != msgs1:
+            if update_id0 != update_id1:
                 chat_id = msg1['from']['id']
                 text    = msg1['text']
                 sendMessage(chat_id, text)
