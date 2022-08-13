@@ -19,15 +19,35 @@ def getUpdates():
     return -1, None, None
 
 
+def getRandomUser():
+    r = requests.get(url='https://randomuser.me/api')
+    user = r.json()['results'][0]
+    first = user['name']['first']
+    last = user['name']['last']
+    print(first, last)
+
+getRandomUser()
+
+
+
+def sendMessage(chat_id, text):
+    payload = {
+        'chat_id': chat_id,
+        'text': text
+    }
+    r = requests.get(url=f'https://api.telegram.org/bot{token}/sendMessage', params=payload)
+
+
+
 def main():
     last_update_id = getUpdates()[0]
     while True:
         curr_update_id, chat_id, text = getUpdates()
         if last_update_id != curr_update_id:
-            print("msg: ------->>>>>>> ", text)
+            sendMessage(chat_id, text)
             last_update_id = curr_update_id
 
-main()
+# main()
 
 
 
