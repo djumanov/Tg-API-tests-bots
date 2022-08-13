@@ -15,7 +15,7 @@ def sendMessage(chat_id, text):
     }
     r = requests.get(url=url_for_sendMessage, params=msg)
 
-    print("sent message ......... ")
+    print("sent message ......... -> ", text)
 
 
 def getUpdates():
@@ -43,5 +43,4 @@ while True:
             if msgs0 != msgs1:
                 chat_id = msg1['from']['id']
                 text    = msg1['text']
-                print("last message ----- >>>>  ", text)
                 sendMessage(chat_id, text)
